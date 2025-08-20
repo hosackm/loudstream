@@ -12,13 +12,9 @@ uv sync
 
 ```python
 # To measure
-import loudstream as ls
-meter = ls.Meter()
-lkfs = meter.measure("some-file.wav")
+from loudstream import Meter
 
-# To normalize
-target = -14
-ls.normalize("some-file.wav", "output.wav", target)
+lufs = Meter().measure("some-file.wav")
 ```
 
 ## Running Tests
