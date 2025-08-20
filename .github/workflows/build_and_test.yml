@@ -1,0 +1,51 @@
+name: CI – Build & Test
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "setup.py"
+      - "requirements.txt"
+      - ".github/workflows/**"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "setup.py"
+      - "requirements.txt"
+      - ".github/workflows/**"
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.13"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Run pytest
+        run: |
+          python -m pip install pytest
+          pytest -v
+
