@@ -12,6 +12,7 @@ build-backend = "setuptools.build_meta"
 name = "loudstream"
 version = "0.1.3"
 description = "Python wrapper for libebur128 with streaming support"
+urls = { Homepage = "https://github.com/hosackm/loudstream", Source = "https://github.com/hosackm/loudstream" }
 authors = [
   { name = "Matt Hosack", email = "hosack.matt@gmail.com" }
 ]
