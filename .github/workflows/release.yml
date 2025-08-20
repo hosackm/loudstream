@@ -50,13 +50,13 @@ jobs:
           files: dist/*
 
   publish-pypi:
-    needs: build-and-publish
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: dist-ubuntu-latest
+          name: dist
           path: dist/
 
       - name: Publish to PyPI
