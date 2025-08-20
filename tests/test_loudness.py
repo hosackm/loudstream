@@ -2,10 +2,10 @@ from random import randint
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-import pyebur128 as ebu
+import loudstream as ebu
 import pytest
 
-from pyebur128.normalize import normalize
+from loudstream.normalize import normalize
 
 HERE = Path(__file__).parent
 

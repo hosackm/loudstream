@@ -9,7 +9,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyebur128"
+name = "loudstream"
 version = "0.1.2"
 description = "Python wrapper for libebur128 with streaming support"
 authors = [
@@ -17,7 +17,7 @@ authors = [
 ]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
   "cffi",
   "soundfile",
@@ -30,6 +30,6 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["pyebur128*"]
+include = ["loudstream*"]
 exclude = ["external*", "tests*", "docs*"]
 

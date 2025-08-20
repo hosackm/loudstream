@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
-project(pyebur128)
+project(loudstream)
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 
-set(PY_IMPORT_NAME pyebur128)
+set(PY_IMPORT_NAME loudstream)
 
 add_subdirectory(extern/libebur128)
 
