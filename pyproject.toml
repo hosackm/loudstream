@@ -12,7 +12,6 @@ build-backend = "setuptools.build_meta"
 name = "loudstream"
 version = "0.1.5"
 description = "Python wrapper for libebur128 with streaming support"
-urls = { Homepage = "https://github.com/hosackm/loudstream", Source = "https://github.com/hosackm/loudstream" }
 authors = [
   { name = "Matt Hosack", email = "hosack.matt@gmail.com" }
 ]
@@ -23,6 +22,10 @@ dependencies = [
   "cffi",
   "soundfile",
 ]
+
+[project.urls]
+homepage = "https://github.com/hosackm/loudstream"
+source = "https://github.com/hosackm/loudstream"
 
 [project.optional-dependencies]
 dev = [
