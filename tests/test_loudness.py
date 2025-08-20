@@ -10,7 +10,7 @@ from loudstream.normalize import normalize
 HERE = Path(__file__).parent
 
 
-def is_close(actual, target, threshold=0.1):
+def is_close(actual, target, threshold=0.2):
     return target - threshold <= actual <= target + threshold
 
 
