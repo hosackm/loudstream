@@ -8,13 +8,12 @@ A file-streaming Python API around [libebur128](https://github.com/jiixyj/libebu
 uv sync
 ```
 
-## To Use
+## Usage
 
 ```python
-# To measure
 from loudstream import Meter
 
-lufs = Meter().measure("some-file.wav")
+lufs, peak = Meter().measure("some-file.wav")
 ```
 
 ## Running Tests
