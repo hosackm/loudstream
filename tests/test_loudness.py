@@ -1,81 +1,80 @@
-from random import randint
 from pathlib import Path
-from tempfile import NamedTemporaryFile
+from random import randint
+from tempfile import TemporaryDirectory
 
-import loudstream as ebu
 import pytest
 
-from loudstream.normalize import normalize
+from loudstream import Meter, normalize
 
-HERE = Path(__file__).parent
+# https://en.wikipedia.org/wiki/EBU_R_128?utm_source=chatgpt.com#Normalisation
+COMPLIANCE_THRESHOLD = 0.5
 
 
-def is_close(actual, target, threshold=0.2):
+def is_close(actual, target, threshold=COMPLIANCE_THRESHOLD):
     return target - threshold <= actual <= target + threshold
 
 
+@pytest.mark.parametrize("double", [True, False])
 @pytest.mark.parametrize(
-    "input_path,target",
+    "input_path,expected_loudness,expected_peak",
     [
-        ("data/1770-2_Comp_23LKFS_10000Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_23LKFS_10000Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_23LKFS_10000Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_23LKFS_2000Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_24LKFS_10000Hz_2ch.wav", -24),
-        ("data/1770-2_Comp_24LKFS_2000Hz_2ch.wav", -24),
-        ("data/1770-2_Comp_23LKFS_1000Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_23LKFS_25Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_24LKFS_1000Hz_2ch.wav", -24),
-        ("data/1770-2_Comp_24LKFS_25Hz_2ch.wav", -24),
-        ("data/1770-2_Comp_23LKFS_100Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_23LKFS_500Hz_2ch.wav", -23),
-        ("data/1770-2_Comp_24LKFS_100Hz_2ch.wav", -24),
-        ("data/1770-2_Comp_24LKFS_500Hz_2ch.wav", -24),
-        ("data/1770-2_Conf_Mono_Voice+Music-23LKFS.wav", -23),
-        ("data/1770-2_Conf_Mono_Voice+Music-24LKFS.wav", -24),
-        ("data/1770-2_Conf_Stereo_VinL+R-23LKFS.wav", -23),
-        ("data/1770-2_Conf_Stereo_VinL+R-24LKFS.wav", -24),
+        ("1770-2_Comp_23LKFS_10000Hz_2ch.wav", -23, -25.5),
+        ("1770-2_Comp_23LKFS_2000Hz_2ch.wav", -23, -25.5),
+        ("1770-2_Comp_23LKFS_1000Hz_2ch.wav", -23, -23),
+        ("1770-2_Comp_23LKFS_500Hz_2ch.wav", -23, -22.3),
+        ("1770-2_Comp_23LKFS_100Hz_2ch.wav", -23, -21),
+        ("1770-2_Comp_23LKFS_25Hz_2ch.wav", -23, -11.9),
+        ("1770-2_Comp_24LKFS_10000Hz_2ch.wav", -24, -27),
+        ("1770-2_Comp_24LKFS_2000Hz_2ch.wav", -24, -26.5),
+        ("1770-2_Comp_24LKFS_1000Hz_2ch.wav", -24, -24),
+        ("1770-2_Comp_24LKFS_100Hz_2ch.wav", -24, -22.3),
+        ("1770-2_Comp_24LKFS_500Hz_2ch.wav", -24, -23.3),
+        ("1770-2_Comp_24LKFS_25Hz_2ch.wav", -24, -12.9),
+        ("1770-2_Conf_Mono_Voice+Music-23LKFS.wav", -23, -4.7),
+        ("1770-2_Conf_Mono_Voice+Music-24LKFS.wav", -24, -5.7),
+        ("1770-2_Conf_Stereo_VinL+R-23LKFS.wav", -23, -7.9),
+        ("1770-2_Conf_Stereo_VinL+R-24LKFS.wav", -24, -8.9),
     ],
 )
-def test_measure(input_path, target):
-    input_path = HERE / input_path
-    meter = ebu.Meter()
-    loudness = meter.measure(str(input_path))
-    assert is_close(loudness, target)
+def test_measure(
+    signal_directory, input_path, expected_loudness, expected_peak, double
+):
+    loudness, tp = Meter().measure(signal_directory / input_path, as_double=double)
+    assert is_close(tp, expected_peak)
+    assert is_close(loudness, expected_loudness)
 
 
 @pytest.mark.parametrize(
-    "input_path",
+    "input_path,loudness",
     [
-        "data/1770-2_Comp_23LKFS_10000Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_10000Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_10000Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_2000Hz_2ch.wav",
-        "data/1770-2_Comp_24LKFS_10000Hz_2ch.wav",
-        "data/1770-2_Comp_24LKFS_2000Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_1000Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_25Hz_2ch.wav",
-        "data/1770-2_Comp_24LKFS_1000Hz_2ch.wav",
-        "data/1770-2_Comp_24LKFS_25Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_100Hz_2ch.wav",
-        "data/1770-2_Comp_23LKFS_500Hz_2ch.wav",
-        "data/1770-2_Comp_24LKFS_100Hz_2ch.wav",
-        "data/1770-2_Comp_24LKFS_500Hz_2ch.wav",
-        "data/1770-2_Conf_Mono_Voice+Music-23LKFS.wav",
-        "data/1770-2_Conf_Mono_Voice+Music-24LKFS.wav",
-        "data/1770-2_Conf_Stereo_VinL+R-23LKFS.wav",
-        "data/1770-2_Conf_Stereo_VinL+R-24LKFS.wav",
+        ("1770-2_Comp_23LKFS_10000Hz_2ch.wav", -23),
+        ("1770-2_Comp_23LKFS_2000Hz_2ch.wav", -23),
+        ("1770-2_Comp_23LKFS_1000Hz_2ch.wav", -23),
+        ("1770-2_Comp_23LKFS_500Hz_2ch.wav", -23),
+        ("1770-2_Comp_23LKFS_100Hz_2ch.wav", -23),
+        ("1770-2_Comp_23LKFS_25Hz_2ch.wav", -23),
+        ("1770-2_Comp_24LKFS_10000Hz_2ch.wav", -24),
+        ("1770-2_Comp_24LKFS_2000Hz_2ch.wav", -24),
+        ("1770-2_Comp_24LKFS_1000Hz_2ch.wav", -24),
+        ("1770-2_Comp_24LKFS_100Hz_2ch.wav", -24),
+        ("1770-2_Comp_24LKFS_500Hz_2ch.wav", -24),
+        ("1770-2_Comp_24LKFS_25Hz_2ch.wav", -24),
+        ("1770-2_Conf_Mono_Voice+Music-23LKFS.wav", -23),
+        ("1770-2_Conf_Mono_Voice+Music-24LKFS.wav", -23),
+        ("1770-2_Conf_Stereo_VinL+R-23LKFS.wav", -23),
+        ("1770-2_Conf_Stereo_VinL+R-24LKFS.wav", -24),
     ],
 )
-def test_normalize(input_path):
-    input_path = HERE / input_path
-    temp = NamedTemporaryFile(suffix=".wav")
-    temp_path = Path(temp.name)
+def test_normalize(signal_directory, input_path, loudness):
+    input_path = signal_directory / input_path
 
-    target = randint(-21, -12)
-    normalize(input_path, temp_path, target)
+    with TemporaryDirectory() as tmpdir:
+        output_path = Path(tmpdir) / "test.wav"
 
-    meter = ebu.Meter()
-    loudness = meter.measure(str(temp_path))
+        deviation_dbtp = 5
+        tld = randint(loudness - deviation_dbtp, loudness + deviation_dbtp)
+        normalize(input_path, output_path, tld, -1)
 
-    assert is_close(loudness, target)
+        ld, pk = Meter().measure(str(output_path))
+        assert is_close(ld, tld)
+        assert pk < -1
