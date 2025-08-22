@@ -41,9 +41,9 @@ class Meter:
 
         Parameters
         ----------
-        audio_source : AudioSource
-            The AudioSource from which to read frames from.
-        blocksize : int, optional
+        source : str | Path | IO[bytes] | SoundFile
+            The filename, filepath, file object, or soundfile to read from.
+        framesize : int, optional
             Number of frames per block to process during streaming analysis.
             Larger values are more efficient, smaller values reduce memory footprint.
             Default is 4096.
@@ -104,9 +104,6 @@ class Meter:
                     raise RuntimeError("Failed to compute loudness")
                 true_peak = max(true_peak, out_true_peak[0])
 
-            return out_loudness[0], 20 * math.log10(true_peak)
+            return out_loudness[0], 20.0 * math.log10(true_peak)
         finally:
             self.lib.ebur128_destroy(self.ffi.new("ebur128_state**", st))
-
-
-__all__ = ["Meter"]

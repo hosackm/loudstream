@@ -7,14 +7,9 @@ set(PY_IMPORT_NAME loudstream)
 
 add_subdirectory(extern/libebur128)
 
-if(TARGET ebur128)
-  if(APPLE)
-    set_target_properties(
-      ebur128 PROPERTIES INSTALL_RPATH "@loader_path/${CMAKE_INSTALL_LIBDIR}")
-  else()
-    set_target_properties(ebur128 PROPERTIES INSTALL_RPATH "$ORIGIN/${CMAKE_INSTALL_LIBDIR}")
-  endif()
-else()
-  message(FATAL_ERROR "Expected target 'ebur128' not found.")
-endif()
+install(TARGETS ebur128
+    LIBRARY DESTINATION ${SKBUILD_PROJECT_NAME}
+    ARCHIVE DESTINATION ${SKBUILD_PROJECT_NAME}
+    RUNTIME DESTINATION ${SKBUILD_PROJECT_NAME}
+)
 

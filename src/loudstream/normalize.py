@@ -8,6 +8,9 @@ from loudstream.source import make_audio_source
 from loudstream.meter import Meter
 
 
+__all__ = ["compute_gain_factor", "normalize"]
+
+
 def normalize(
     input: str | Path | IO[bytes] | sf.SoundFile,
     output_path: str | Path,
@@ -15,6 +18,16 @@ def normalize(
     target_peak: float,
     framesize: int = 2048,
 ) -> None:
+    """
+    Apply normalization to achieve the target loudness level while also
+    not exceeding the target peak level.
+
+    Args:
+        input           (str | Path | IO[bytes] | sf.SoundFile): input source
+        output_path     (str | Path): output path or filename to write to
+        target_loudness (float): desired loudness after normalization [LUFS]
+        peak_target     (float): desired peak ceiling [dBTP]
+    """
     lufs, dbtp = Meter().measure(input)
     gain_factor = compute_gain_factor(lufs, target_loudness, dbtp, target_peak)
 
@@ -49,8 +62,15 @@ def compute_gain_factor(loudness_measured, loudness_target, peak_measured, peak_
     """
     gain_loudness_db = loudness_target - loudness_measured
     gain_peak_db = peak_target - peak_measured
-    gain_final_db = min(gain_loudness_db, gain_peak_db)
-    return math.pow(10.0, gain_final_db / 20.0)
+    return math.pow(10.0, min(gain_loudness_db, gain_peak_db) / 20.0)
 
 
-__all__ = ["compute_gain_factor", "normalize"]
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 3:
+        print("Provide input and output files")
+        sys.exit(1)
+
+    input, output = sys.argv[:2]
+    normalize(input, output, -14, -1)

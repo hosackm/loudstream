@@ -5,7 +5,11 @@ A file-streaming Python API around [libebur128](https://github.com/jiixyj/libebu
 ## Install
 
 ```bash
-uv sync
+pip install loudstream
+
+# OR
+
+uv add loudstream
 ```
 
 ## Usage
@@ -19,6 +23,8 @@ lufs, peak = Meter().measure("some-file.wav")
 ## Running Tests
 
 ```bash
-uv run pytest
+uv venv
+uv pip install .
+uv run pytest -v
 ```
 

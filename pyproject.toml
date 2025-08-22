@@ -4,7 +4,6 @@ requires = [
     "scikit-build",
     "cmake>=3.14",
     "ninja",
-    "pybind11>=2.12"
 ]
 build-backend = "setuptools.build_meta"
 
@@ -17,7 +16,19 @@ authors = [
 ]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
+keywords = ["audio", "loudness", "EBU R128", "libebur128"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Multimedia :: Sound/Audio",
+]
 dependencies = [
   "cffi",
   "soundfile",

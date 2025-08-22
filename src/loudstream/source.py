@@ -5,6 +5,15 @@ import numpy as np
 import soundfile as sf
 
 
+__all__ = [
+    "AudioSource",
+    "FileObjectSource",
+    "PathSource",
+    "SoundFileSource",
+    "make_audio_source",
+]
+
+
 class AudioSource(Protocol):
     """A streaming audio source that yields numpy frames."""
 
@@ -65,12 +74,3 @@ class FileObjectSource(SoundFileSource):
             raise Exception("File must be opened in 'rb' binary mode.")
         self.file = sf.SoundFile(file_obj)
         super().__init__(self.file)
-
-
-__all__ = [
-    "AudioSource",
-    "FileObjectSource",
-    "PathSource",
-    "SoundFileSource",
-    "make_audio_source",
-]
