@@ -2,7 +2,7 @@ from skbuild import setup
 
 setup(
     name="loudstream",
-    version="0.1.1",
+    version="0.2.0",
     packages=["loudstream"],
     package_dir={"": "src"},
     cmake_install_dir="src/loudstream",
