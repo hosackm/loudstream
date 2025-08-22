@@ -16,7 +16,7 @@ for root, dirs, files in os.walk(skbuild_root):
 
 setup(
     name="loudstream",
-    version="0.2.2",
+    version="0.2.3",
     packages=["loudstream"],
     package_dir={"": "src"},
     cmake_install_dir="src/loudstream",
