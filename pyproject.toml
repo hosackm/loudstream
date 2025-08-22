@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "loudstream"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python wrapper for libebur128 with streaming support"
 authors = [
   { name = "Matt Hosack", email = "hosack.matt@gmail.com" }
@@ -45,7 +45,7 @@ dev = [
 ]
 
 [tool.bumpversion]
-current_version = "0.2.0"
+current_version = "0.2.1"
 commit = true
 tag = true
 
