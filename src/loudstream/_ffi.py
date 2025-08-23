@@ -25,6 +25,9 @@ def build_ffi_and_lib() -> tuple[FFI, LibEbur128]:
     library_path = HERE / "lib" / f"libebur128{EXTENSION}"
 
     ffi = FFI()
-    ffi.cdef(header_path.read_text())
+    contents = header_path.read_text()
+    contents = "".join([ln for ln in contents.split() if not ln.startswith("#")])
+    ffi.cdef(contents)
+
     lib = ffi.dlopen(str(library_path))
     return ffi, cast(LibEbur128, lib)
