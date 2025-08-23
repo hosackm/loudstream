@@ -1,3 +1,12 @@
-exclude tests/*
+prune _skbuild
+prune dist
+prune tests
+
+include CMakeLists.txt
+recursive-include extern *
+recursive-include src *
+
+global-exclude *.dylib *.so *.dll
+exclude tests
 exclude *.wav
 

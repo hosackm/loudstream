@@ -21,16 +21,10 @@ class LibEbur128(Protocol):
 
 
 def build_ffi_and_lib() -> tuple[FFI, LibEbur128]:
-    ffi = FFI()
-    ffi.cdef("""
-    typedef struct ebur128_state ebur128_state;
+    header_path = HERE / "include" / "ebur128.h"
+    library_path = HERE / "lib" / f"libebur128{EXTENSION}"
 
-    ebur128_state* ebur128_init(unsigned int channels, unsigned long samplerate, unsigned int mode);
-    void ebur128_destroy(ebur128_state** st);
-    int ebur128_add_frames_float(ebur128_state* st, const float* frames, size_t frames_size);
-    int ebur128_add_frames_double(ebur128_state* st, const double* frames, size_t frames_size);
-    int ebur128_loudness_global(ebur128_state* st, double* out);
-    int ebur128_true_peak(ebur128_state* st, unsigned int channel_number, double* out);
-    """)
-    lib_path = Path(HERE, "lib", f"libebur128{EXTENSION}")
-    return ffi, cast(LibEbur128, ffi.dlopen(str(lib_path)))
+    ffi = FFI()
+    ffi.cdef(header_path.read_text())
+    lib = ffi.dlopen(str(library_path))
+    return ffi, cast(LibEbur128, lib)
