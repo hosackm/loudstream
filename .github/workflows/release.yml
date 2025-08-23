@@ -22,7 +22,7 @@ jobs:
           pip install build scikit-build cmake ninja setuptools wheel
 
       - name: Build package
-        run: python -m build
+        run: python -m build --sdist
 
       - name: Upload dist as artifact
         uses: actions/upload-artifact@v4
@@ -34,7 +34,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # needed to create releases
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
