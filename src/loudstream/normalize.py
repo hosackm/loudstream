@@ -63,14 +63,3 @@ def compute_gain_factor(loudness_measured, loudness_target, peak_measured, peak_
     gain_loudness_db = loudness_target - loudness_measured
     gain_peak_db = peak_target - peak_measured
     return math.pow(10.0, min(gain_loudness_db, gain_peak_db) / 20.0)
-
-
-if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) < 3:
-        print("Provide input and output files")
-        sys.exit(1)
-
-    input, output = sys.argv[:2]
-    normalize(input, output, -14, -1)
