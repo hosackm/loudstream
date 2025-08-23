@@ -13,7 +13,3 @@ install(TARGETS ebur128
     RUNTIME DESTINATION ${SKBUILD_PROJECT_NAME}/lib
 )
 
-install(FILES extern/libebur128/ebur128/ebur128.h
-    DESTINATION ${SKBUILD_PROJECT_NAME}/include
-)
-
