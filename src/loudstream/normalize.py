@@ -45,6 +45,8 @@ def normalize(
                 break
             fout.write(frames * gain_factor)
 
+    input_source.close()
+
 
 def compute_gain_factor(loudness_measured, loudness_target, peak_measured, peak_target):
     """

@@ -29,6 +29,8 @@ class AudioSource(Protocol):
         """Yield frames of shape (n_channels, n_samples)."""
         ...
 
+    def close(self): ...
+
 
 def make_audio_source(obj: str | Path | IO[bytes] | sf.SoundFile) -> AudioSource:
     if isinstance(obj, sf.SoundFile):
@@ -47,6 +49,10 @@ class SoundFileSource:
         self.channels = file.channels
         self.format = file.format
         self.samplerate = file.samplerate
+
+    def close(self):
+        if isinstance(self.file, sf.SoundFile) and not self.file.closed:
+            self.file.close()
 
     def read_frames(
         self,
