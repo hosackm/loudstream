@@ -104,6 +104,8 @@ class Meter:
                     raise RuntimeError("Failed to compute loudness")
                 true_peak = max(true_peak, out_true_peak[0])
 
-            return out_loudness[0], 20.0 * math.log10(true_peak)
+            return out_loudness[0], 20.0 * math.log10(
+                true_peak
+            ) if true_peak > 0.0 else -120.0
         finally:
             self.lib.ebur128_destroy(self.ffi.new("ebur128_state**", st))
