@@ -1,6 +1,6 @@
 [project]
 name = "loudstream"
-version = "0.3.1"
+version = "0.3.2"
 description = "Python wrapper for libebur128 with streaming support"
 authors = [
   { name = "Matt Hosack", email = "hosack.matt@gmail.com" }
@@ -54,7 +54,7 @@ sdist.exclude = [
 
 
 [tool.bumpversion]
-current_version = "0.3.1"
+current_version = "0.3.2"
 commit = true
 tag = true
 
